@@ -6,6 +6,8 @@ const User = require("../models/user.model")
 
 const bcrypt = require("bcrypt")
 const bcryptSalt = 10
+//Rescatado del ejercicio con Laura del Toro
+const checkAuthenticated = (req, res, next) => req.isAuthenticated() ? next() : res.redirect('/login')
 
 
 // User signup
@@ -44,6 +46,7 @@ router.post('/login', passport.authenticate("local", {
     failureFlash: true,
     passReqToCallback: true,
     badRequestMessage: 'Rellena todos los campos'
+   
 }))
 
 
@@ -52,5 +55,11 @@ router.get("/logout", (req, res) => {
     req.logout()
     res.redirect("/login")
 })
+
+
+
+
+////////////////////Copiado//////////
+router.get('/pagina-privada', checkAuthenticated, (req, res) => res.render('auth/principal', { user: req.user }))   
 
 module.exports = router
